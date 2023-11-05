@@ -1,0 +1,28 @@
+services:
+  app:
+    image: asksf:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    command:
+      - python
+      - -m
+      - uvicorn
+      - asksf.server:app
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8000"
+      - --reload
+    environment:
+      ENVIRONMENT: dev
+      LLM_CACHING: true
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ~/.aws/:/root/.aws:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
